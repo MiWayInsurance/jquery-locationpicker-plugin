@@ -1,11 +1,11 @@
-/*! jquery-locationpicker - v0.1.15 - 2016-09-26 */
+/*! jquery-locationpicker - v0.1.15 - 2016-11-21 */
 "use strict";
 
 angular.module("angular-jquery-locationpicker", []).constant("angularJQueryLocationpickerDefaultValue", {
     css: {
         width: "550px",
         height: "400px",
-        "float": "left"
+        float: "left"
     }
 }).service("angularJQueryLocationpickerService", [ "angularJQueryLocationpickerDefaultValue", function(defaultValue) {
     var service = {};
@@ -27,7 +27,7 @@ angular.module("angular-jquery-locationpicker", []).constant("angularJQueryLocat
         element.css({
             width: elementStyle.width || defaultValue.css.width,
             height: elementStyle.height || defaultValue.css.height,
-            "float": elementStyle.float || defaultValue.css.float,
+            float: elementStyle.float || defaultValue.css.float,
             overflow: "hidden"
         });
     };

@@ -269,9 +269,8 @@
         }, 300);
     }
 
-    function updateMap(gmapContext, $target, options) {
-        var settings = $.extend({}, $.fn.locationpicker.defaults, options ),
-            latNew = settings.location.latitude,
+    function updateMap(gmapContext, $target, settings) {
+        var latNew = settings.location.latitude,
             lngNew = settings.location.longitude,
             radiusNew = settings.radius,
             latOld = gmapContext.settings.location.latitude,
@@ -298,6 +297,37 @@
      * @returns {*}
      */
     $.fn.locationpicker = function( options, params ) {
+        // defaults
+        var defaults = {
+            location: {latitude: 40.7324319, longitude: -73.82480777777776},
+            locationName: "",
+            radius: 500,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: [],
+            mapOptions: {},
+            scrollwheel: true,
+            inputBinding: {
+                latitudeInput: null,
+                longitudeInput: null,
+                radiusInput: null,
+                locationNameInput: null
+            },
+            enableAutocomplete: false,
+            enableAutocompleteBlur: false,
+            autocompleteOptions: null,
+            addressFormat: 'postal_code',
+            enableReverseGeocode: true,
+            draggable: true,
+            onchanged: function(currentLocation, radius, isMarkerDropped) {},
+            onlocationnotfound: function(locationName) {},
+            oninitialized: function (component) {},
+            // must be undefined to use the default gMaps marker
+            markerIcon: undefined,
+            markerDraggable: true,
+            markerVisible : true
+        }
+
         if (typeof options == 'string') { // Command provided
             var _targetDomElement = this.get(0);
             // Plug-in is not applied - nothing to do.
@@ -367,14 +397,14 @@
         }
         return this.each(function() {
             var $target = $(this);
+            // Extend defaults
+            var settings = $.extend({}, defaults, options );
             // If plug-in hasn't been applied before - initialize, otherwise - skip
             if (isPluginApplied(this)){
-              updateMap(getContextForElement(this), $(this), options);
+              updateMap(getContextForElement(this), $(this), settings);
               return;
             }
             // Plug-in initialization is required
-            // Defaults
-            var settings = $.extend({}, $.fn.locationpicker.defaults, options );
             // Initialize
             var gmapContext = new GMapContext(this, $.extend({}, {
                 zoom: settings.zoom,
@@ -431,33 +461,4 @@
             });
         });
     };
-    $.fn.locationpicker.defaults = {
-        location: {latitude: 40.7324319, longitude: -73.82480777777776},
-        locationName: "",
-        radius: 500,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        styles: [],
-        mapOptions: {},
-        scrollwheel: true,
-        inputBinding: {
-            latitudeInput: null,
-            longitudeInput: null,
-            radiusInput: null,
-            locationNameInput: null
-        },
-        enableAutocomplete: false,
-        enableAutocompleteBlur: false,
-        autocompleteOptions: null,
-        addressFormat: 'postal_code',
-        enableReverseGeocode: true,
-        draggable: true,
-        onchanged: function(currentLocation, radius, isMarkerDropped) {},
-        onlocationnotfound: function(locationName) {},
-        oninitialized: function (component) {},
-        // must be undefined to use the default gMaps marker
-        markerIcon: undefined,
-        markerDraggable: true,
-        markerVisible : true
-    }
 }( jQuery ));
